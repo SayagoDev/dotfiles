@@ -1,0 +1,9 @@
+[user]
+	name = Saúl Sáyago
+	email = sayagoadd@gmail.com
+[init]
+	defaultBranch = main
+[push]
+	default = current
+[credential]
+	helper = cache

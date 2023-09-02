@@ -1,0 +1,7 @@
+{
+  "Agrupar Información": {
+    "prefix": "details",
+    "body": [ "<details>\n  <summary><strong>$1</strong></summary>\n\n</details>" ],
+    "description": "Agrupar Información"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Snippets",
+  "version": "1.0.0",
+  "description": "Code snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": "markdown",
+        "path": "markdown.json"
+      },
+      {
+        "language": "rust",
+        "path": "rust.json"
+      },
+      {
+        "language": "dart",
+        "path": "dart.json"
+      },
+      {
+        "language": "javascript",
+        "path": "javascript.json"
+      }
+    ]
+  }
+}

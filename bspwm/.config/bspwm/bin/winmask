@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+masked=$(bspc query -N -n .hidden -d focused)
+
+{ { { [ -z "$masked" ] ;} && bspc node focused -g hidden=on ;} || bspc node "$masked" -g hidden=off ;}

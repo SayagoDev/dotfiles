@@ -1,0 +1,55 @@
+#!/bin/bash
+
+#Colours
+greenColour="\e[0;32m\033[1m"
+endColour="\033[0m\e[0m"
+redColour="\e[0;31m\033[1m"
+blueColour="\e[0;34m\033[1m"
+yellowColour="\e[0;33m\033[1m"
+purpleColour="\e[0;35m\033[1m"
+turquoiseColour="\e[0;36m\033[1m"
+grayColour="\e[0;37m\033[1m"
+
+ordenar() {
+	for f in *."$1"; do
+		if [[ "$f" =~ [0-9]+\. ]]; then
+			mv "$f" "$(printf %.3d "${f%.*}")"."$1"
+		fi
+	done
+}
+
+tput civis
+
+for i in "$@"; do
+    file="$i"
+
+    # Creando el directorio de trabajo
+    echo -e "\n${purpleColour}[+] Creando directorio de trabajo...${endColour}"
+    mkdir "i2p_$i"
+    cd "i2p_$i" || exit
+    mv ../"$file" .
+
+    # Descomprimiendo el archivo
+    echo -e "${blueColour}[+] Descomprimiendo el archivo $file...${endColour}"
+    7z x "$file" >/dev/null
+
+    # Ordenando el nombre de las imagenes
+    ordenar "jpg"
+    sleep 2s
+
+    # Creando el pdf
+    convert -- *."jpg" "$file".pdf
+    sleep 2s
+
+    perl-rename 's/\.zip//g' -- *.pdf
+    perl-rename 's/_/ /g' -- *.pdf
+    echo -e "${greenColour}[+] Se creo el pdf: $file${endColour}\n"
+    sleep 1s
+
+    mv -- *.pdf ../
+    cd ..
+done
+
+echo -e "${yellowColour}[+] Eliminando los directorios de trabajo...${endColour}"
+rm -rf i2p_*
+tput cnorm

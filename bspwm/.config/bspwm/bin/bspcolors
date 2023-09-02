@@ -1,0 +1,167 @@
+#!/bin/bash
+
+# A script to get colours from xrdb & deploy it to polybar, alacritty & rofi.
+
+DIR="$HOME/.config/bspwm"
+
+getcolors () {
+	FOREGROUND="$(xrdb -query | grep 'foreground:'| awk '{print $NF}')"
+	BACKGROUND="$(xrdb -query | grep 'background:'| awk '{print $NF}')"
+	SELECT_FOREGOUND="$(xrdb -query | grep 'selection_f:'| awk '{print $NF}')"
+	SELECT_BACKGROUND="$(xrdb -query | grep 'selection_b:'| awk '{print $NF}')"
+	CURSOR="$(xrdb -query | grep 'cursorColor:'| awk '{print $NF}')"
+	BLACK="$(xrdb -query | grep 'color0:'| awk '{print $NF}')"
+	RED="$(xrdb -query | grep 'color1:'| awk '{print $NF}')"
+	GREEN="$(xrdb -query | grep 'color2:'| awk '{print $NF}')"
+	YELLOW="$(xrdb -query | grep 'color3:'| awk '{print $NF}')"
+	BLUE="$(xrdb -query | grep 'color4:'| awk '{print $NF}')"
+	MAGENTA="$(xrdb -query | grep 'color5:'| awk '{print $NF}')"
+	CYAN="$(xrdb -query | grep 'color6:'| awk '{print $NF}')"
+	WHITE="$(xrdb -query | grep 'color7:'| awk '{print $NF}')"
+	ALTBLACK="$(xrdb -query | grep 'color8:'| awk '{print $NF}')"
+	ALTRED="$(xrdb -query | grep 'color9:'| awk '{print $NF}')"
+	ALTGREEN="$(xrdb -query | grep 'color10:'| awk '{print $NF}')"
+	ALTYELLOW="$(xrdb -query | grep 'color11:'| awk '{print $NF}')"
+	ALTBLUE="$(xrdb -query | grep 'color12:'| awk '{print $NF}')"
+	ALTMAGENTA="$(xrdb -query | grep 'color13:'| awk '{print $NF}')"
+	ALTCYAN="$(xrdb -query | grep 'color14:'| awk '{print $NF}')"
+	ALTWHITE="$(xrdb -query | grep 'color15:'| awk '{print $NF}')"
+}
+
+bspbar () {
+	cat > $DIR/polybar/colors <<- EOF	
+	[color]
+
+	FOREGROUND = #CDC7D3
+	BACKGROUND = ${BACKGROUND}
+	BLACK = ${BLACK}
+	RED = ${RED}
+	GREEN = ${GREEN}
+	YELLOW = ${YELLOW}
+	BLUE = ${BLUE}
+	MAGENTA = ${MAGENTA}
+	CYAN = ${CYAN}
+	WHITE = ${WHITE}
+	ALTBLACK = ${ALTBLACK}
+	ALTRED = ${ALTRED}
+	ALTGREEN = ${ALTGREEN}
+	ALTYELLOW = ${ALTYELLOW}
+	ALTBLUE = ${ALTBLUE}
+	ALTMAGENTA = ${ALTMAGENTA}
+	ALTCYAN = ${ALTCYAN}
+	ALTWHITE = ${ALTWHITE}
+	EOF
+}
+
+bspterm () {
+	cat > $HOME/.config/kitty/colors.conf <<- EOF
+		background ${BACKGROUND}
+		foreground ${FOREGROUND}
+		cursor #bbbbbb
+		selection_background ${SELECT_BACKGROUND}
+		color0 ${BLACK}
+		color8 ${ALTBLACK}
+		color1 ${RED}
+		color9 ${ALTRED}
+		color2 ${GREEN}
+		color10 ${ALTGREEN}
+		color3 ${YELLOW}
+		color11 ${ALTYELLOW}
+		color4 ${BLUE}
+		color12 ${ALTBLUE}
+		color5 ${MAGENTA}
+		color13 ${ALTMAGENTA}
+		color6 ${CYAN}
+		color14 ${ALTCYAN}
+		color7 ${WHITE}
+		color15 ${ALTWHITE}
+		selection_foreground ${SELECT_FOREGOUND}
+	EOF
+}
+
+bsprofi () {
+	cat > $DIR/rofi/themes/colors.rasi <<- EOF	
+	* {
+		background:			${BACKGROUND};
+		foreground:			${FOREGROUND};
+		selected:			${BLUE};
+		urgent:				${RED};
+		on:					${GREEN};
+		off:				${RED};
+	}
+	EOF
+}
+
+bspdunst () {
+	cat > $HOME/.config/dunst/dunstrc <<- EOF
+	[global]
+		monitor = 0
+		follow = keyboard
+
+		### GEOMETRY ###
+
+		width = 280
+		height = 300
+		origin = top-right
+		offset = 10x38
+
+		indicate_hidden = yes
+		shrink = no
+		separator_height = 4
+		separator_color = auto
+		padding = 20
+		horizontal_padding = 20
+		frame_width = 1
+		sort = no
+		idle_threshold = 120
+		font = Iosevka Nerd Font 9
+		line_height = 4
+		markup = full
+		format = %s\n%b
+		alignment = left
+		show_age_threshold = 60
+		word_wrap = yes
+		ignore_newline = no
+		stack_duplicates = false
+		hide_duplicate_count = yes
+		show_indicators = no
+		icon_position = left
+		max_icon_size = 48
+		sticky_history = yes
+		history_length = 20
+		browser = x-www-browser -new-tab
+		always_run_script = true
+		mouse_left_click = do_action, open_url
+		mouse_right_click = close_all
+		title = Dunst
+		class = Dunst
+
+	[urgency_low]
+		background = "${BACKGROUND}"
+		foreground = "${GREEN}"
+		frame_color = "${BLUE}"
+		timeout = 3
+
+	[urgency_normal]
+		background = "${BACKGROUND}"
+		foreground = "${GREEN}"
+		frame_color = "${BLUE}"
+		timeout = 5
+
+	[urgency_critical]
+		background = "${BACKGROUND}"
+		foreground = "${GREEN}"
+		frame_color = "${RED}"
+		timeout = 10
+	EOF
+}
+
+main () {
+	getcolors
+	bspbar
+	bspterm
+	bsprofi
+	bspdunst
+}
+
+main

@@ -1,0 +1,14 @@
+layout tall
+cd ~/workspace/natours
+launch --title CODE nvim
+
+new_tab COMP
+cd ~/workspace/natours
+enabled_layouts tall, vertical
+layout tall
+launch
+launch
+
+new_tab APUN
+cd ~/workspace/apuntes
+launch nvim

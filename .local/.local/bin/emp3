@@ -1,0 +1,11 @@
+#!/bin/bash
+
+mkdir audios_mp3
+cd audios_mp3 || exit
+
+for i in "$@"; do
+    ffmpeg -loglevel panic -i "../$i" "$i".mp3
+done
+
+sleep 2s
+perl-rename 's/.mp4//g' -- *.mp3

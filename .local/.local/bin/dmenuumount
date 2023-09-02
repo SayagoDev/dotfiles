@@ -1,0 +1,12 @@
+#!/bin/sh
+
+rofi="rofi -m -4 -dmenu -i -no-fixed-num-lines -p"
+rofipass="rofi -dmenu -password -i -no-fixed-num-lines -p"
+
+exclusionregex="\(/boot\|/home\|/\)$"
+drives=$(lsblk -lp | grep "k /" | grep -v "$exclusionregex" | awk '{print $1, "(" $4 ")", "on", $7}')
+[ "$drives" = "" ] && exit
+chosen=$(echo "$drives" | $rofi "Unmount which drive? " | awk '{print $1}')
+[ "$chosen" = "" ] && exit
+
+$rofipass "Password: " | sudo -S umount "$chosen" && pgrep -x dunst && notify-send "$chosen unmounted."

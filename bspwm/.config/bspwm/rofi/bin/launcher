@@ -1,0 +1,5 @@
+#!/bin/sh
+
+DIR="$HOME/.config/bspwm"
+
+rofi -m -4 -no-lazy-grab -show drun -theme $DIR/rofi/themes/launcher.rasi && xmodmap $HOME/.Xmodmap

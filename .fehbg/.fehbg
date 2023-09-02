@@ -1,0 +1,2 @@
+#!/bin/sh
+feh --no-fehbg --bg-scale '/home/sayago/.config/bspwm/wallpapers/cyberpunk.jpg' 

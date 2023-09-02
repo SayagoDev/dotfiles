@@ -1,0 +1,48 @@
+#!/bin/bash
+
+DIR="$HOME/.config/bspwm"
+
+rofi_command="rofi -m -4 -theme $DIR/rofi/themes/asroot.rasi"
+
+# Apps
+terminal=" Kitty"
+files=" Pcmanfm"
+editor=" Geany"
+clifm=" Ranger"
+lpad=" Leafpad"
+backup=" Timeshift"
+virtual=" VirtualBox"
+gparted=" Gparted"
+
+# Variable passed to rofi
+options="$terminal\n$files\n$editor\n$clifm\n$lpad\n$backup\n$virtual\n$gparted"
+
+# Functions
+
+chosen="$(echo -e "$options" | $rofi_command -p "Run as root(#)" -dmenu -selected-row 0)"
+case $chosen in
+    $terminal)
+        apps_as_root 'kitty --config=/home/sayago/.config/kitty/kitty.conf'
+        ;;
+    $files)
+        apps_as_root 'dbus-run-session pcmanfm'
+        ;;
+    $editor)
+        apps_as_root geany
+        ;;
+    $clifm)
+        apps_as_root 'kitty --config=/home/sayago/.config/kitty/kitty.conf ranger'
+        ;;
+    $lpad)
+        apps_as_root leafpad
+        ;;
+    $backup)
+        apps_as_root 'timeshift-gtk'
+        ;;
+    $virtual)
+        apps_as_root 'virtualbox'
+        ;;
+    $gparted)
+        apps_as_root 'gparted'
+        ;;
+esac

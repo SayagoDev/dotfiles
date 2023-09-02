@@ -1,0 +1,22 @@
+#!/bin/sh
+
+rofi="rofi -m -4 -dmenu -i -no-fixed-num-lines -p"
+rofipass="rofi -dmenu -password -i -no-fixed-num-lines -p"
+
+mountable=$(lsblk -lp | grep "disk $" | awk '{print $1, "(" $4 ")"}')
+[ "$mountable" = "" ] && exit 1
+chosen=$(echo "$mountable" | $rofi "Mount which drive? " | awk '{print $1}')
+[ "$chosen" = "" ] && exit 1
+
+# sudo mount "$chosen" && exit 0
+
+dirs=$(find /mnt /media /mount /home -type d -maxdepth 3 2>/dev/null)
+mountpoint=$(echo "$dirs" | $rofi "Type in mount point: " )
+[ "$mountpoint" = "" ] && exit 1
+
+if [ ! -d "$mountpoint" ]; then
+  mkdiryn=$(print "No\nYes" | $rofi "$mountpoint does not exits. Create it? ")
+  [ "$mkdiryn" = Yes ] && sudo mkdir -p "$mountpoint"
+fi
+
+$rofipass "Password: " | sudo -S mount "$chosen" "$mountpoint" -o umask=000 && pgrep -x dunst && notify-send "$chosen mounted to $mountpoint."
